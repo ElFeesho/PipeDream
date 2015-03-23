@@ -9,6 +9,7 @@ class GameClient : public Client
 public:
 	GameClient();
 	~GameClient();
+	void update();
 	int supportedPipeDreamVersion();
 };
 
@@ -20,6 +21,11 @@ GameClient::GameClient()
 GameClient::~GameClient()
 {
 	cout << "Destroying GameClient" << endl;
+}
+
+void GameClient::update()
+{
+	cout << "Client update" << endl;
 }
 
 int GameClient::supportedPipeDreamVersion()

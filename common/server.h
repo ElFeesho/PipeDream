@@ -6,6 +6,8 @@ class Server
 public:
 	virtual ~Server() = 0;
 	virtual int supportedPipeDreamVersion() = 0;
+
+	virtual void update() = 0;
 };
 
 Server::~Server()

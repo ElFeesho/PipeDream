@@ -10,6 +10,7 @@ public:
 	GameServer();
 	~GameServer();
 	int supportedPipeDreamVersion();
+	void update();
 };
 
 GameServer::GameServer()
@@ -20,6 +21,11 @@ GameServer::GameServer()
 GameServer::~GameServer()
 {
 	cout << "Destroying GameServer" << endl;
+}
+
+void GameServer::update()
+{
+	cout << "Server Update" << endl;
 }
 
 int GameServer::supportedPipeDreamVersion()

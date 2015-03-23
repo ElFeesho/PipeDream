@@ -38,8 +38,8 @@ public:
 
 	void iterate()
 	{
-		// server->update();
-		// client->update();
+		server->update();
+		client->update();
 	}
 private:
 	Server *server { 0 };
@@ -64,5 +64,11 @@ int main(int argc, char **argv)
 		delete e;
 		return -1;
 	}
+
+	while(1)
+	{
+		game.iterate();
+	}
+
 	return 0;
 }
