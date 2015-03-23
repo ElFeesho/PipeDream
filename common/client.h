@@ -8,10 +8,13 @@ public:
 	virtual int supportedPipeDreamVersion() = 0;
 };
 
+Client::~Client()
+{
+	// Pure virtual destructors still need to be defined...
+}
+
 extern "C" {
-
 Client *loadClient();
-
 }
 
 #endif

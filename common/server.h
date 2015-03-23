@@ -8,8 +8,13 @@ public:
 	virtual int supportedPipeDreamVersion() = 0;
 };
 
+Server::~Server()
+{
+	// Pure virtual destructors still need to be defined...
+}
+
 extern "C" {
-	Server *loadServer();
+Server *loadServer();
 }
 
 #endif
