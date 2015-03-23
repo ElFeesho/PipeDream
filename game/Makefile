@@ -5,6 +5,10 @@ OUTPUT=game
 all:$(OBJS)
 	g++ -o $(OUTPUT) $(OBJS)
 
+modules:
+	cd ../server; make
+	cd ../client; make
+
 %o:%cpp
 	g++ $(CXXFLAGS) -c $<
 
