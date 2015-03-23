@@ -16,6 +16,7 @@ public:
 private:
 	Transmitter *transmitter;
 	Receiver *receiver;
+	vector<Payload*> pendingPayloads;
 };
 
 GameClient::GameClient()
@@ -30,7 +31,11 @@ GameClient::~GameClient()
 
 void GameClient::update()
 {
-	cout << "Client update" << endl;
+	vector<Payload*> readData = receiver->read();
+	cout << "Client update: " << readData.size() << endl;
+	pendingPayloads.push_back(new Payload(1, (unsigned char*)"1234", 4));
+	transmitter->transmit(pendingPayloads);
+	pendingPayloads.clear();
 }
 
 void GameClient::registerTransmitter(Transmitter *transmitter)

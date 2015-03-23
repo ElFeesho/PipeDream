@@ -1,6 +1,8 @@
 #include <iostream>
 
 #include <server.h>
+#include <payload.h>
+#include <vector>
 
 using namespace std;
 
@@ -17,6 +19,7 @@ public:
 private:
 	Transmitter *transmitter;
 	Receiver *receiver;
+	vector<Payload*> pendingPayloads;
 };
 
 GameServer::GameServer()
@@ -36,12 +39,16 @@ void GameServer::registerTransmitter(Transmitter *transmitter)
 
 void GameServer::registerReceiver(Receiver *receiver)
 {
+	cout << "Registered receiver: " << receiver << endl;
 	this->receiver = receiver;
 }
 
 void GameServer::update()
 {
-	cout << "Server Update" << endl;
+	vector<Payload*> readData = receiver->read();
+	cout << "Server Update: " << readData.size() << endl;
+	transmitter->transmit(pendingPayloads);
+	pendingPayloads.clear();
 }
 
 int GameServer::supportedPipeDreamVersion()

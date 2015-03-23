@@ -3,9 +3,42 @@
 #include <server.h>
 #include <client.h>
 
+#include <receiver.h>
+#include <transmitter.h>
+
+
 #include "moduleloader.h"
 
 using namespace std;
+
+class Transceiver : public Receiver, public Transmitter
+{
+public:
+	Transceiver()
+	{
+
+	}
+
+	~Transceiver()
+	{
+
+	}
+
+	vector<Payload*> read()
+	{
+		vector<Payload*> pending;
+  		pending.swap(receivedPayloads);
+  		receivedPayloads.clear();
+		return pending;
+	}
+
+	void transmit(vector<Payload*> data)
+	{
+		receivedPayloads.insert(receivedPayloads.end(), data.begin(), data.end());
+	}
+private:
+	vector<Payload*> receivedPayloads;
+};
 
 class Game {
 public:
@@ -34,6 +67,15 @@ public:
 	{
 		server = serverLoader->load();
 		client = clientLoader->load();
+
+		clientToServer = new Transceiver();
+		serverToClient = new Transceiver();
+
+		server->registerReceiver(clientToServer);
+		server->registerTransmitter(serverToClient);
+
+		client->registerReceiver(serverToClient);
+		client->registerTransmitter(clientToServer);
 	}
 
 	void iterate()
@@ -46,6 +88,9 @@ private:
 	Client *client { 0 };
 	ModuleLoader<Server*> *serverLoader;
 	ModuleLoader<Client*> *clientLoader;
+
+	Transceiver *clientToServer;
+	Transceiver *serverToClient;
 };
 
 int main(int argc, char **argv)
