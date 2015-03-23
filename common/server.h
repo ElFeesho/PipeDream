@@ -1,6 +1,9 @@
 #ifndef __SERVER_H__
 #define __SERVER_H__
 
+#include <transmitter.h>
+#include <receiver.h>
+
 class Server
 {
 public:
@@ -8,6 +11,9 @@ public:
 	virtual int supportedPipeDreamVersion() = 0;
 
 	virtual void update() = 0;
+
+	virtual void registerTransmitter(Transmitter *transmitter) = 0;
+	virtual void registerReceiver(Receiver *Receiver) = 0;
 };
 
 Server::~Server()

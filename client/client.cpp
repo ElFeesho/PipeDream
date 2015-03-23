@@ -11,6 +11,11 @@ public:
 	~GameClient();
 	void update();
 	int supportedPipeDreamVersion();
+	void registerTransmitter(Transmitter *transmitter);
+	void registerReceiver(Receiver *receiver);
+private:
+	Transmitter *transmitter;
+	Receiver *receiver;
 };
 
 GameClient::GameClient()
@@ -26,6 +31,16 @@ GameClient::~GameClient()
 void GameClient::update()
 {
 	cout << "Client update" << endl;
+}
+
+void GameClient::registerTransmitter(Transmitter *transmitter)
+{
+	this->transmitter = transmitter;
+}
+
+void GameClient::registerReceiver(Receiver *receiver)
+{
+	this->receiver = receiver;
 }
 
 int GameClient::supportedPipeDreamVersion()

@@ -11,6 +11,12 @@ public:
 	~GameServer();
 	int supportedPipeDreamVersion();
 	void update();
+
+	void registerTransmitter(Transmitter *transmitter);
+	void registerReceiver(Receiver *receiver);
+private:
+	Transmitter *transmitter;
+	Receiver *receiver;
 };
 
 GameServer::GameServer()
@@ -21,6 +27,16 @@ GameServer::GameServer()
 GameServer::~GameServer()
 {
 	cout << "Destroying GameServer" << endl;
+}
+
+void GameServer::registerTransmitter(Transmitter *transmitter)
+{
+	this->transmitter = transmitter;
+}
+
+void GameServer::registerReceiver(Receiver *receiver)
+{
+	this->receiver = receiver;
 }
 
 void GameServer::update()

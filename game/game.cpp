@@ -51,11 +51,17 @@ private:
 int main(int argc, char **argv)
 {
 	cout << "PipeDream Game" << endl;
-	Game game(new ModuleLoader<Server*>("../server/server.lib", "loadServer"), new ModuleLoader<Client*>("../client/client.lib", "loadClient"));
+
 
 	try
 	{
+		Game game(new ModuleLoader<Server*>("../server/server.lib", "loadServer"), new ModuleLoader<Client*>("../client/client.lib", "loadClient"));
 		game.loadModules();
+
+		while(1)
+		{
+			game.iterate();
+		}
 	}
 	catch(ModuleLoaderException *e)
 	{
@@ -65,10 +71,6 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	while(1)
-	{
-		game.iterate();
-	}
 
 	return 0;
 }
