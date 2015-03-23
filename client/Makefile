@@ -1,5 +1,5 @@
 OBJS=client.o
-CXXFLAGS=-I../common
+CXXFLAGS=-I../common -std=c++11
 OUTPUT=client.lib
 
 all:$(OBJS)

@@ -1,5 +1,5 @@
 OBJS=server.o
-CXXFLAGS=-I../common
+CXXFLAGS=-I../common -std=c++11
 OUTPUT=server.lib
 
 all:$(OBJS)

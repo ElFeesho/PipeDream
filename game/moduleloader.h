@@ -19,6 +19,7 @@ private:
 template<class RetType> class ModuleLoader
 {
 public:
+
 	ModuleLoader(const string &module, const string &symbol) : modulePath(module), symbolToLoad(symbol)
 	{
 		loadedContext = dlopen(modulePath.c_str(), RTLD_NOW);
@@ -43,6 +44,8 @@ public:
 		{
 			throw new ModuleLoaderException("Could not load "+symbolToLoad+" in "+modulePath+" - "+string(dlerror()));
 		}
+
+
 		return ((RetType (*)())result)();
 	}
 
