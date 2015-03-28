@@ -1,6 +1,12 @@
 #include <iostream>
 
-#include <client.h>
+#include "../common/payload.h"
+#include "../common/client.h"
+#include "../common/transmitter.h"
+#include "../common/receiver.h"
+#include "../common/gfx.h"
+
+#include <vector>
 
 using namespace std;
 
@@ -13,10 +19,12 @@ public:
 	int supportedPipeDreamVersion();
 	void registerTransmitter(Transmitter *transmitter);
 	void registerReceiver(Receiver *receiver);
+	void registerGfx(Gfx *gfx);
 private:
 	Transmitter *transmitter;
 	Receiver *receiver;
 	vector<Payload*> pendingPayloads;
+	Gfx *gfx;
 };
 
 GameClient::GameClient()
@@ -51,6 +59,11 @@ void GameClient::registerReceiver(Receiver *receiver)
 int GameClient::supportedPipeDreamVersion()
 {
 	return 1;
+}
+
+void GameClient::registerGfx(Gfx *gfx)
+{
+	this->gfx = gfx;
 }
 
 extern "C" {

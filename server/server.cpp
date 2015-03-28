@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include <server.h>
-#include <payload.h>
+#include "../common/server.h"
+#include "../common/payload.h"
 #include <vector>
 
 using namespace std;

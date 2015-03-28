@@ -1,8 +1,8 @@
 #ifndef __SERVER_H__
 #define __SERVER_H__
 
-#include <transmitter.h>
-#include <receiver.h>
+#include "../common/transmitter.h"
+#include "../common/receiver.h"
 
 class Server
 {

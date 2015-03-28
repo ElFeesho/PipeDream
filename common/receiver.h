@@ -1,9 +1,9 @@
 #ifndef __RECEIVER_H__
 #define __RECEIVER_H__
 
-#include <payload.h>
-
 #include <vector>
+
+class Payload;
 
 using std::vector;
 

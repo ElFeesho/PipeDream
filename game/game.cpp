@@ -1,13 +1,15 @@
+#include <SDL/SDL.h>
+
 #include <iostream>
+#include <SDL_events.h>
 
-#include <server.h>
-#include <client.h>
+#include "../common/server.h"
+#include "../common/client.h"
 
-#include <receiver.h>
-#include <transmitter.h>
-
-
+#include "../common/receiver.h"
+#include "../common/transmitter.h"
 #include "moduleloader.h"
+#include "sdlgfx.h"
 
 using namespace std;
 
@@ -42,7 +44,7 @@ private:
 
 class Game {
 public:
-	Game(ModuleLoader<Server*> *serverModuleLoader, ModuleLoader<Client*> *clientModuleLoader) : serverLoader(serverModuleLoader), clientLoader(clientModuleLoader)
+	Game(Gfx *GFX, ModuleLoader<Server*> *serverModuleLoader, ModuleLoader<Client*> *clientModuleLoader) : gfx(GFX), serverLoader(serverModuleLoader), clientLoader(clientModuleLoader)
 	{
 
 	}
@@ -61,6 +63,7 @@ public:
 
 		delete serverLoader;
 		delete clientLoader;
+		delete gfx;
 	}
 
 	void loadModules()
@@ -76,14 +79,21 @@ public:
 
 		client->registerReceiver(serverToClient);
 		client->registerTransmitter(clientToServer);
+		client->registerGfx(gfx);
 	}
 
 	void iterate()
 	{
 		server->update();
 		client->update();
+
+		gfx->render();
 	}
+
+	bool shouldRun();
+
 private:
+	Gfx *gfx { 0 };
 	Server *server { 0 };
 	Client *client { 0 };
 	ModuleLoader<Server*> *serverLoader;
@@ -97,13 +107,12 @@ int main(int argc, char **argv)
 {
 	cout << "PipeDream Game" << endl;
 
-
 	try
 	{
-		Game game(new ModuleLoader<Server*>("../server/server.lib", "loadServer"), new ModuleLoader<Client*>("../client/client.lib", "loadClient"));
+		Game game(new SdlGfx(), new ModuleLoader<Server*>("modules/libserver.dylib", "loadServer"), new ModuleLoader<Client*>("modules/libclient.dylib", "loadClient"));
 		game.loadModules();
 
-		while(1)
+		while(game.shouldRun())
 		{
 			game.iterate();
 		}
@@ -118,4 +127,17 @@ int main(int argc, char **argv)
 
 
 	return 0;
+}
+
+bool Game::shouldRun()
+{
+	SDL_Event event;
+	while(SDL_PollEvent(&event))
+	{
+		if(event.type == SDL_QUIT)
+		{
+			return false;
+		}
+	}
+	return true;
 }
