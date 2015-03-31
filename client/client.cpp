@@ -5,6 +5,9 @@
 #include "../common/transmitter.h"
 #include "../common/receiver.h"
 #include "../common/gfx.h"
+#include "../common/playerstate.h"
+#include "../common/level.h"
+#include "levelrenderer.h"
 
 #include <vector>
 
@@ -25,6 +28,10 @@ private:
 	Receiver *receiver;
 	vector<Payload*> pendingPayloads;
 	Gfx *gfx;
+	PlayerState *playerState { 0 };
+	Level *currentLevel;
+
+	void processPayloads(vector<Payload *> payloads);
 };
 
 GameClient::GameClient()
@@ -40,10 +47,24 @@ GameClient::~GameClient()
 void GameClient::update()
 {
 	vector<Payload*> readData = receiver->read();
-	cout << "Client update: " << readData.size() << endl;
-	pendingPayloads.push_back(new Payload(1, (unsigned char*)"1234", 4));
-	transmitter->transmit(pendingPayloads);
-	pendingPayloads.clear();
+
+	processPayloads(readData);
+
+	if(playerState != nullptr)
+	{
+		currentLevel = new Level(playerState->levelName());
+		playerState = nullptr;
+	}
+
+	if(currentLevel != nullptr)
+	{
+		LevelRenderer *levelRenderer = new LevelRenderer();
+		levelRenderer->loadTileset(gfx);
+		levelRenderer->render(currentLevel, gfx);
+		delete levelRenderer;
+	}
+
+	gfx->render();
 }
 
 void GameClient::registerTransmitter(Transmitter *transmitter)
@@ -73,4 +94,15 @@ Client *loadClient()
 	return new GameClient();
 }
 
+}
+
+void GameClient::processPayloads(vector<Payload *> payloads)
+{
+	for(auto payload : payloads)
+	{
+		if(payload->getOrigin() == -1)
+		{
+			playerState = new PlayerState();
+		}
+	}
 }

@@ -10,7 +10,7 @@ class Payload;
 class Transmitter
 {
 public:
-	virtual void transmit(vector<Payload*> payloads) = 0;
+	virtual void transmit(Payload *payloads) = 0;
 };
 
 #endif

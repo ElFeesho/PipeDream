@@ -15,6 +15,12 @@ public:
 
 	void render();
 
+	virtual Image *openImage(std::string filename) override;
+
+	virtual void drawImage(Image *img, int x, int y, int width = -1, int height = -1, int sourceX = 0, int sourceY = 0) override;
+
+	virtual int width();
+	virtual int height();
 private:
 };
 

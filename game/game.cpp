@@ -10,6 +10,7 @@
 #include "../common/transmitter.h"
 #include "moduleloader.h"
 #include "sdlgfx.h"
+#include "../common/joincommand.h"
 
 using namespace std;
 
@@ -34,9 +35,9 @@ public:
 		return pending;
 	}
 
-	void transmit(vector<Payload*> data)
+	void transmit(Payload* data)
 	{
-		receivedPayloads.insert(receivedPayloads.end(), data.begin(), data.end());
+		receivedPayloads.push_back(data);
 	}
 private:
 	vector<Payload*> receivedPayloads;
@@ -90,7 +91,14 @@ public:
 		gfx->render();
 	}
 
+	void clientJoinServer()
+	{
+		JoinCommand *command = new JoinCommand(1024);
+		clientToServer->transmit(command->parcel());
+	}
+
 	bool shouldRun();
+
 
 private:
 	Gfx *gfx { 0 };
@@ -111,6 +119,8 @@ int main(int argc, char **argv)
 	{
 		Game game(new SdlGfx(), new ModuleLoader<Server*>("modules/libserver.dylib", "loadServer"), new ModuleLoader<Client*>("modules/libclient.dylib", "loadClient"));
 		game.loadModules();
+
+		game.clientJoinServer();
 
 		while(game.shouldRun())
 		{
@@ -141,3 +151,4 @@ bool Game::shouldRun()
 	}
 	return true;
 }
+
