@@ -26,6 +26,7 @@ public:
 	void registerReceiver(Receiver *receiver);
 	void registerGfx(Gfx *gfx);
 	void registerTimeProvider(TimeProvider *timeProvider);
+	void registerSpriteLoader(SpriteLoader *spriteLoader);
 private:
 	Transmitter *transmitter;
 	Receiver *receiver;
@@ -39,13 +40,12 @@ private:
 	void processPayloads(vector<Payload *> payloads);
 
 	TimeProvider *timeProvider;
+	SpriteLoader *spriteLoader;
 };
 
 GameClient::GameClient()
 {
 	cout << "Created GameClient" << endl;
-
-	playerSprite = new Sprite(7, {200, 200, 200, 200, 200, 200, 200});
 }
 
 GameClient::~GameClient()
@@ -62,6 +62,7 @@ void GameClient::update()
 	if(playerState != nullptr)
 	{
 		currentLevel = new Level(playerState->levelName());
+		playerSprite = spriteLoader->loadSprites("resources/sprites/character_walking.png")["walk_right"];
 		playerState = nullptr;
 	}
 
@@ -69,24 +70,12 @@ void GameClient::update()
 	{
 		LevelRenderer *levelRenderer = new LevelRenderer();
 		levelRenderer->loadTileset(gfx);
-		levelRenderer->render(currentLevel, gfx);
+		//levelRenderer->render(currentLevel, gfx);
 		delete levelRenderer;
 
 		playerSprite->update(timeProvider->ticks());
-		SpriteRenderer *spriteRenderer = new SpriteRenderer(gfx->openImage("resources/sprites/character_walking.png"), 0, 32, 48);
+		SpriteRenderer *spriteRenderer = new SpriteRenderer(gfx->openImage("resources/sprites/character_walking.png"));
 		spriteRenderer->draw(gfx, playerSprite, 10, 10);
-		delete spriteRenderer;
-
-		spriteRenderer = new SpriteRenderer(gfx->openImage("resources/sprites/character_walking.png"), 7, 32, 48);
-		spriteRenderer->draw(gfx, playerSprite, 60, 10);
-		delete spriteRenderer;
-
-		spriteRenderer = new SpriteRenderer(gfx->openImage("resources/sprites/character_walking.png"), 14, 32, 48);
-		spriteRenderer->draw(gfx, playerSprite, 120, 10);
-		delete spriteRenderer;
-
-		spriteRenderer = new SpriteRenderer(gfx->openImage("resources/sprites/character_walking.png"), 21, 32, 48);
-		spriteRenderer->draw(gfx, playerSprite, 180, 10);
 		delete spriteRenderer;
 	}
 
@@ -136,4 +125,9 @@ void GameClient::processPayloads(vector<Payload *> payloads)
 void GameClient::registerTimeProvider(TimeProvider *timeProvider)
 {
 	this->timeProvider = timeProvider;
+}
+
+void GameClient::registerSpriteLoader(SpriteLoader *spriteLoader)
+{
+	this->spriteLoader = spriteLoader;
 }

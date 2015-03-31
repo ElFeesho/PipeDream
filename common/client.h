@@ -2,6 +2,7 @@
 #define __CLIENT_H__
 
 #include "timeprovider.h"
+#include "spriteloader.h"
 
 class Transmitter;
 class Receiver;
@@ -18,6 +19,7 @@ public:
 	virtual void registerTransmitter(Transmitter *transmitter) = 0;
 	virtual void registerReceiver(Receiver *receiver) = 0;
 	virtual void registerTimeProvider(TimeProvider *timeProvider) = 0;
+	virtual void registerSpriteLoader(SpriteLoader *spriteLoader) = 0;
 };
 
 Client::~Client()

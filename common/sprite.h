@@ -12,7 +12,7 @@ using std::vector;
 class Sprite
 {
 public:
-	Sprite(int frames, vector<int> delays) : numFrames(frames), frameDelays(delays)
+	Sprite(int frames, int startFrame, int cellWidth, int cellHeight, int delay) : numFrames(frames), startOffset(startFrame), frameWidth(cellWidth), frameHeight(cellHeight), frameDelay(delay)
 	{
 	}
 
@@ -20,7 +20,7 @@ public:
 
 	void update(long currentTime)
 	{
-		if(lastChange + frameDelays[currentFrame] > currentTime)
+		if(lastChange + frameDelay > currentTime)
 		{
 			lastChange = currentTime;
 			currentFrame++;
@@ -35,6 +35,21 @@ public:
 		return currentFrame;
 	}
 
+	int width()
+	{
+		return frameWidth;
+	}
+
+	int height()
+	{
+		return frameHeight;
+	}
+
+	int offset()
+	{
+		return startOffset;
+	}
+
 	void reset()
 	{
 		currentFrame = numFrames;
@@ -42,7 +57,10 @@ public:
 	}
 private:
 	const int numFrames;
-	const vector<int> frameDelays;
+	const int startOffset;
+	const int frameWidth;
+	const int frameHeight;
+	const int frameDelay;
 
 	int currentFrame { 0 };
 	long lastChange { 0 };

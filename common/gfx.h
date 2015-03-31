@@ -7,8 +7,8 @@ class Image
 {
 public:
 	virtual ~Image() {}
-	virtual int width() = 0;
-	virtual int height() = 0;
+	virtual int width() const = 0;
+	virtual int height() const = 0;
 };
 
 class Gfx

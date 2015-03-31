@@ -6,15 +6,15 @@
 
 static inline int spriteXCoord(int spriteWidthInCells, int frame, int cellWidth)
 {
-	return (frame % spriteWidthInCells)*cellWidth;
+	return (frame % spriteWidthInCells) * cellWidth;
 }
 
 static inline int spriteYCoord(int spriteWidthInCells, int frame, int cellHeight)
 {
-	return (frame / spriteWidthInCells)*cellHeight;
+	return (frame / spriteWidthInCells) * cellHeight;
 }
 
-SpriteRenderer::SpriteRenderer(Image *image, int frame, int width, int height) : spriteImage(image), startFrame(frame), cellWidth(width), cellHeight(height), spriteWidthInCells(image->width()/cellWidth)
+SpriteRenderer::SpriteRenderer(Image *image) : spriteImage(image)
 {
 
 }
@@ -26,5 +26,9 @@ SpriteRenderer::~SpriteRenderer()
 
 void SpriteRenderer::draw(Gfx *gfx, Sprite *sprite, int x, int y)
 {
-	gfx->drawImage(const_cast<Image*>(spriteImage), x, y, cellWidth, cellHeight, spriteXCoord(spriteWidthInCells, startFrame + sprite->frame(), cellWidth), spriteYCoord(spriteWidthInCells, startFrame + sprite->frame(), cellHeight));
+	int spriteWidthInCells = spriteImage->width() / sprite->width();
+	int spriteFrame = sprite->offset() + sprite->frame();
+	gfx->drawImage(const_cast<Image *>(spriteImage), x, y, sprite->width(), sprite->height(),
+						spriteXCoord(spriteWidthInCells, spriteFrame, sprite->width()),
+						spriteYCoord(spriteWidthInCells, spriteFrame, sprite->height()));
 }

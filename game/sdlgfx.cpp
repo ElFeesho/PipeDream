@@ -18,16 +18,16 @@ public:
 	}
 
 
-	int width() {
+	int width() const {
 		return image->w;
 	}
 
-	virtual int height()
+	virtual int height() const
 	{
 		return image->h;
 	}
 
-	SDL_Surface *getSurface()
+	SDL_Surface *getSurface() const
 	{
 		return image;
 	}
