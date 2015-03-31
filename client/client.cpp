@@ -8,6 +8,8 @@
 #include "../common/playerstate.h"
 #include "../common/level.h"
 #include "levelrenderer.h"
+#include "../common/sprite.h"
+#include "spriterenderer.h"
 
 #include <vector>
 
@@ -23,6 +25,7 @@ public:
 	void registerTransmitter(Transmitter *transmitter);
 	void registerReceiver(Receiver *receiver);
 	void registerGfx(Gfx *gfx);
+	void registerTimeProvider(TimeProvider *timeProvider);
 private:
 	Transmitter *transmitter;
 	Receiver *receiver;
@@ -31,12 +34,18 @@ private:
 	PlayerState *playerState { 0 };
 	Level *currentLevel;
 
+	Sprite *playerSprite;
+
 	void processPayloads(vector<Payload *> payloads);
+
+	TimeProvider *timeProvider;
 };
 
 GameClient::GameClient()
 {
 	cout << "Created GameClient" << endl;
+
+	playerSprite = new Sprite(7, {200, 200, 200, 200, 200, 200, 200});
 }
 
 GameClient::~GameClient()
@@ -62,6 +71,23 @@ void GameClient::update()
 		levelRenderer->loadTileset(gfx);
 		levelRenderer->render(currentLevel, gfx);
 		delete levelRenderer;
+
+		playerSprite->update(timeProvider->ticks());
+		SpriteRenderer *spriteRenderer = new SpriteRenderer(gfx->openImage("resources/sprites/character_walking.png"), 0, 32, 48);
+		spriteRenderer->draw(gfx, playerSprite, 10, 10);
+		delete spriteRenderer;
+
+		spriteRenderer = new SpriteRenderer(gfx->openImage("resources/sprites/character_walking.png"), 7, 32, 48);
+		spriteRenderer->draw(gfx, playerSprite, 60, 10);
+		delete spriteRenderer;
+
+		spriteRenderer = new SpriteRenderer(gfx->openImage("resources/sprites/character_walking.png"), 14, 32, 48);
+		spriteRenderer->draw(gfx, playerSprite, 120, 10);
+		delete spriteRenderer;
+
+		spriteRenderer = new SpriteRenderer(gfx->openImage("resources/sprites/character_walking.png"), 21, 32, 48);
+		spriteRenderer->draw(gfx, playerSprite, 180, 10);
+		delete spriteRenderer;
 	}
 
 	gfx->render();
@@ -105,4 +131,9 @@ void GameClient::processPayloads(vector<Payload *> payloads)
 			playerState = new PlayerState();
 		}
 	}
+}
+
+void GameClient::registerTimeProvider(TimeProvider *timeProvider)
+{
+	this->timeProvider = timeProvider;
 }

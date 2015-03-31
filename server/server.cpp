@@ -1,12 +1,11 @@
 #include <iostream>
+#include <map>
 
 #include "../common/server.h"
 #include "../common/payload.h"
 #include "../common/playerstate.h"
 #include "../common/transmitter.h"
 #include "../common/receiver.h"
-
-#include <map>
 
 using namespace std;
 

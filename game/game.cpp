@@ -1,7 +1,6 @@
 #include <SDL/SDL.h>
 
 #include <iostream>
-#include <SDL_events.h>
 
 #include "../common/server.h"
 #include "../common/client.h"
@@ -11,6 +10,7 @@
 #include "moduleloader.h"
 #include "sdlgfx.h"
 #include "../common/joincommand.h"
+#include "sdltimeprovider.h"
 
 using namespace std;
 
@@ -45,7 +45,8 @@ private:
 
 class Game {
 public:
-	Game(Gfx *GFX, ModuleLoader<Server*> *serverModuleLoader, ModuleLoader<Client*> *clientModuleLoader) : gfx(GFX), serverLoader(serverModuleLoader), clientLoader(clientModuleLoader)
+	Game(SdlGfx *GFX, SDLTimeProvider *timeProviderInstance, ModuleLoader<Server *> *serverModuleLoader,
+			  ModuleLoader<Client *> *clientModuleLoader) : gfx(GFX), timeProvider(timeProviderInstance), serverLoader(serverModuleLoader), clientLoader(clientModuleLoader)
 	{
 
 	}
@@ -81,6 +82,7 @@ public:
 		client->registerReceiver(serverToClient);
 		client->registerTransmitter(clientToServer);
 		client->registerGfx(gfx);
+		client->registerTimeProvider(timeProvider);
 	}
 
 	void iterate()
@@ -104,6 +106,7 @@ private:
 	Gfx *gfx { 0 };
 	Server *server { 0 };
 	Client *client { 0 };
+	TimeProvider *timeProvider;
 	ModuleLoader<Server*> *serverLoader;
 	ModuleLoader<Client*> *clientLoader;
 
@@ -117,7 +120,9 @@ int main(int argc, char **argv)
 
 	try
 	{
-		Game game(new SdlGfx(), new ModuleLoader<Server*>("modules/libserver.dylib", "loadServer"), new ModuleLoader<Client*>("modules/libclient.dylib", "loadClient"));
+		Game game(new SdlGfx(), new SDLTimeProvider(),
+					 new ModuleLoader<Server *>("modules/libserver.dylib", "loadServer"),
+					 new ModuleLoader<Client *>("modules/libclient.dylib", "loadClient"));
 		game.loadModules();
 
 		game.clientJoinServer();

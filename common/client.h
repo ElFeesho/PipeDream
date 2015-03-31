@@ -1,6 +1,8 @@
 #ifndef __CLIENT_H__
 #define __CLIENT_H__
 
+#include "timeprovider.h"
+
 class Transmitter;
 class Receiver;
 class Gfx;
@@ -15,6 +17,7 @@ public:
 	virtual void registerGfx(Gfx *gfx) = 0;
 	virtual void registerTransmitter(Transmitter *transmitter) = 0;
 	virtual void registerReceiver(Receiver *receiver) = 0;
+	virtual void registerTimeProvider(TimeProvider *timeProvider) = 0;
 };
 
 Client::~Client()
