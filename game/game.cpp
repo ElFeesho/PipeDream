@@ -123,7 +123,8 @@ int main(int argc, char **argv)
 
 	try
 	{
-		Game game(new SdlGfx(), new SDLTimeProvider(), new PngSpriteLoader(),
+		SdlGfx *gfx = new SdlGfx();
+		Game game(gfx, new SDLTimeProvider(), new PngSpriteLoader(gfx),
 					 new ModuleLoader<Server *>("modules/libserver.dylib", "loadServer"),
 					 new ModuleLoader<Client *>("modules/libclient.dylib", "loadClient"));
 		game.loadModules();

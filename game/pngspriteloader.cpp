@@ -27,7 +27,7 @@ static std::vector<std::string> split(const std::string &s, char delim) {
 	return elems;
 }
 
-PngSpriteLoader::PngSpriteLoader()
+PngSpriteLoader::PngSpriteLoader(Gfx *gfxWrapper) : gfx(gfxWrapper)
 {
 
 }
@@ -122,7 +122,7 @@ map<string, Sprite*> PngSpriteLoader::loadSprites(std::string name)
 			int frameOffset = stoi(frameOffsets[0]);
 			int numFrames = stoi(frameOffsets[1]) - frameOffset;
 			cout << "Sprite " << key << ": Frames: " << numFrames << " Offset: " << frameOffset << endl;
-			result[key] = new Sprite(numFrames, frameOffset, cellWidth, cellHeight, frameDelay);
+			result[key] = new Sprite(gfx->openImage(name), numFrames, frameOffset, cellWidth, cellHeight, frameDelay);
 		}
 	}
 

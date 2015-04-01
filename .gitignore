@@ -1,3 +1,8 @@
+PipeDream
+cmake_*
+CMakeCache.txt
+CMakeFiles
+CMakeLists.txt
 # Compiled Object files
 *.slo
 *.lo

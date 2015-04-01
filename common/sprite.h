@@ -2,17 +2,20 @@
 #define PIPEDREAM_SPRITE_H
 
 #include <vector>
+#include "gfx.h"
 
 using std::vector;
 
 class Sprite
 {
 public:
-	Sprite(int frames, int startFrame, int cellWidth, int cellHeight, int delay) : numFrames(frames), startOffset(startFrame), frameWidth(cellWidth), frameHeight(cellHeight), frameDelay(delay)
+	Sprite(Image *image, int frames, int startFrame, int cellWidth, int cellHeight, int delay) : spriteSheet(image), numFrames(frames), startOffset(startFrame), frameWidth(cellWidth), frameHeight(cellHeight), frameDelay(delay)
 	{
 	}
 
-	~Sprite(){}
+	~Sprite(){
+		delete spriteSheet;
+	}
 
 	void update(long currentTime)
 	{
@@ -25,6 +28,11 @@ public:
 				currentFrame = 0;
 			}
 		}
+	}
+
+	Image *getSpriteSheet()
+	{
+		return spriteSheet;
 	}
 
 	int frame(){
@@ -52,6 +60,7 @@ public:
 		lastChange = currentTime;
 	}
 private:
+	Image *spriteSheet;
 	const int numFrames;
 	const int startOffset;
 	const int frameWidth;

@@ -10,11 +10,13 @@
 class PngSpriteLoader : public SpriteLoader
 {
 public:
-	PngSpriteLoader();
+	PngSpriteLoader(Gfx *gfxWrapper);
 	~PngSpriteLoader();
 
 
 	virtual std::map<std::string, Sprite*> loadSprites(std::string name) override;
+private:
+	Gfx *gfx;
 };
 
 

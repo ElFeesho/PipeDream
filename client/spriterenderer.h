@@ -11,12 +11,10 @@
 class SpriteRenderer
 {
 public:
-	SpriteRenderer(Image *spriteImage);
+	SpriteRenderer();
 	~SpriteRenderer();
 
 	void draw(Gfx *gfx, Sprite *sprite, int x, int y);
-private:
-	const Image *spriteImage;
 };
 
 #endif //PIPEDREAM_SPRITERENDERER_H

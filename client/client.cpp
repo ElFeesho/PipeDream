@@ -10,6 +10,7 @@
 #include "levelrenderer.h"
 #include "../common/sprite.h"
 #include "spriterenderer.h"
+#include "../common/actor.h"
 
 #include <vector>
 
@@ -34,6 +35,7 @@ private:
 	Gfx *gfx;
 	PlayerState *playerState { 0 };
 	Level *currentLevel;
+	Actor *player;
 
 	Sprite *playerSprite;
 
@@ -62,21 +64,21 @@ void GameClient::update()
 	if(playerState != nullptr)
 	{
 		currentLevel = new Level(playerState->levelName());
-		playerSprite = spriteLoader->loadSprites("resources/sprites/character_sword.png")["attack_down"];
 		playerState = nullptr;
+		map<string, Sprite *> sprites = spriteLoader->loadSprites("resources/sprites/character_walking.png");
+		player = new Actor(sprites);
+		player->setCurrentSprite("walk_down");
 	}
 
 	if(currentLevel != nullptr)
 	{
-		LevelRenderer *levelRenderer = new LevelRenderer();
-		levelRenderer->loadTileset(gfx);
-		//levelRenderer->render(currentLevel, gfx);
-		delete levelRenderer;
+//		LevelRenderer *levelRenderer = new LevelRenderer();
+//		levelRenderer->loadTileset(gfx);
+//		levelRenderer->render(currentLevel, gfx);
+//		delete levelRenderer;
 
-		playerSprite->update(timeProvider->ticks());
-		SpriteRenderer *spriteRenderer = new SpriteRenderer(gfx->openImage("resources/sprites/character_sword.png"));
-		spriteRenderer->draw(gfx, playerSprite, 10, 10);
-		delete spriteRenderer;
+		player->update(timeProvider->ticks());
+		player->draw(gfx);
 	}
 
 	gfx->render();
