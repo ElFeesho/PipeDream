@@ -113,6 +113,7 @@ map<string, Sprite*> PngSpriteLoader::loadSprites(std::string name)
 		else if(key == "frameDelay")
 		{
 			frameDelay = stoi(value);
+			cout << "Frame Delay: " << frameDelay << endl;
 		}
 		else
 		{

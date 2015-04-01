@@ -62,7 +62,7 @@ void GameClient::update()
 	if(playerState != nullptr)
 	{
 		currentLevel = new Level(playerState->levelName());
-		playerSprite = spriteLoader->loadSprites("resources/sprites/character_walking.png")["walk_right"];
+		playerSprite = spriteLoader->loadSprites("resources/sprites/character_sword.png")["attack_down"];
 		playerState = nullptr;
 	}
 
@@ -74,7 +74,7 @@ void GameClient::update()
 		delete levelRenderer;
 
 		playerSprite->update(timeProvider->ticks());
-		SpriteRenderer *spriteRenderer = new SpriteRenderer(gfx->openImage("resources/sprites/character_walking.png"));
+		SpriteRenderer *spriteRenderer = new SpriteRenderer(gfx->openImage("resources/sprites/character_sword.png"));
 		spriteRenderer->draw(gfx, playerSprite, 10, 10);
 		delete spriteRenderer;
 	}

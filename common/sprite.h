@@ -1,7 +1,3 @@
-//
-// Created by Christopher Sawczuk on 31/03/2015.
-//
-
 #ifndef PIPEDREAM_SPRITE_H
 #define PIPEDREAM_SPRITE_H
 
@@ -20,7 +16,7 @@ public:
 
 	void update(long currentTime)
 	{
-		if(lastChange + frameDelay > currentTime)
+		if(lastChange + frameDelay < currentTime)
 		{
 			lastChange = currentTime;
 			currentFrame++;
@@ -50,10 +46,10 @@ public:
 		return startOffset;
 	}
 
-	void reset()
+	void reset(long currentTime)
 	{
-		currentFrame = numFrames;
-		lastChange = 0;
+		currentFrame = 0;
+		lastChange = currentTime;
 	}
 private:
 	const int numFrames;
