@@ -32,6 +32,8 @@ public:
 
 	void registerSpriteLoader(SpriteLoader *spriteLoader);
 
+	void registerInputProvider(InputProvider *inputProvider);
+
 private:
 	Transmitter *transmitter;
 	Receiver *receiver;
@@ -136,4 +138,35 @@ void GameClient::registerSpriteLoader(SpriteLoader *spriteLoader)
 									 {
 										 this->player = actor;
 									 });
+}
+
+void GameClient::registerInputProvider(InputProvider *inputProvider)
+{
+	inputProvider->addUpPressHandler([&](){
+
+	});
+	inputProvider->addUpReleaseHandler([&](){
+
+	});
+
+	inputProvider->addDownPressHandler([&](){
+
+	});
+	inputProvider->addDownReleaseHandler([&](){
+
+	});
+
+	inputProvider->addRightPressHandler([&](){
+
+	});
+	inputProvider->addRightReleaseHandler([&](){
+
+	});
+
+	inputProvider->addLeftPressHandler([&](){
+
+	});
+	inputProvider->addLeftReleaseHandler([&](){
+
+	});
 }

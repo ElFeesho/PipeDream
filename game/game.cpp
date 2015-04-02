@@ -12,6 +12,7 @@
 #include "../common/joincommand.h"
 #include "sdltimeprovider.h"
 #include "pngspriteloader.h"
+#include "sdlinputprovider.h"
 
 using namespace std;
 
@@ -85,6 +86,7 @@ public:
 		client->registerGfx(gfx);
 		client->registerTimeProvider(timeProvider);
 		client->registerSpriteLoader(spriteLoader);
+		client->registerInputProvider(new SDLInputProvider());
 	}
 
 	void iterate()
