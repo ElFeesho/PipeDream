@@ -23,9 +23,21 @@ public:
 	int getY() {
 		return Y;
 	}
+
+	void setX(int x)
+	{
+		X = x;
+	}
+
+	void setY(int y)
+	{
+		Y = y;
+	}
+
 private:
 	int X;
 	int Y;
 };
 
 #endif //PIPEDREAM_POSITION_H
+

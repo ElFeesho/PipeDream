@@ -4,15 +4,10 @@
 #include "../common/client.h"
 #include "../common/transmitter.h"
 #include "../common/receiver.h"
-#include "../common/gfx.h"
 #include "../common/playerstate.h"
 #include "../common/level.h"
-#include "levelrenderer.h"
-#include "../common/sprite.h"
-#include "spriterenderer.h"
 #include "../common/actor.h"
-
-#include <vector>
+#include "../common/luavm.h"
 
 using namespace std;
 
@@ -20,34 +15,43 @@ class GameClient : public Client
 {
 public:
 	GameClient();
+
 	~GameClient();
+
 	void update();
+
 	int supportedPipeDreamVersion();
+
 	void registerTransmitter(Transmitter *transmitter);
+
 	void registerReceiver(Receiver *receiver);
+
 	void registerGfx(Gfx *gfx);
+
 	void registerTimeProvider(TimeProvider *timeProvider);
+
 	void registerSpriteLoader(SpriteLoader *spriteLoader);
+
 private:
 	Transmitter *transmitter;
 	Receiver *receiver;
-	vector<Payload*> pendingPayloads;
+	vector<Payload *> pendingPayloads;
 	Gfx *gfx;
-	PlayerState *playerState { 0 };
-	Level *currentLevel;
-	Actor *player;
-
-	Sprite *playerSprite;
+	PlayerState *playerState{0};
+	Level *currentLevel{nullptr};
+	Actor *player{nullptr};
 
 	void processPayloads(vector<Payload *> payloads);
 
 	TimeProvider *timeProvider;
 	SpriteLoader *spriteLoader;
+	LuaVm *vm;
 };
 
 GameClient::GameClient()
 {
 	cout << "Created GameClient" << endl;
+
 }
 
 GameClient::~GameClient()
@@ -57,29 +61,24 @@ GameClient::~GameClient()
 
 void GameClient::update()
 {
-	vector<Payload*> readData = receiver->read();
+	vector<Payload *> readData = receiver->read();
 
 	processPayloads(readData);
 
-	if(playerState != nullptr)
+	if (playerState != nullptr)
 	{
-		currentLevel = new Level(playerState->levelName());
 		playerState = nullptr;
-		map<string, Sprite *> sprites = spriteLoader->loadSprites("resources/sprites/character_walking.png");
-		player = new Actor(sprites);
-		player->setCurrentSprite("walk_down");
+		vm->init("resources/player.lua");
 	}
 
-	if(currentLevel != nullptr)
+	if (player != nullptr)
 	{
-//		LevelRenderer *levelRenderer = new LevelRenderer();
-//		levelRenderer->loadTileset(gfx);
-//		levelRenderer->render(currentLevel, gfx);
-//		delete levelRenderer;
-
-		player->update(timeProvider->ticks());
+		long ticks = timeProvider->ticks();
+		vm->update(ticks);
+		player->update(ticks);
 		player->draw(gfx);
 	}
+
 
 	gfx->render();
 }
@@ -115,9 +114,9 @@ Client *loadClient()
 
 void GameClient::processPayloads(vector<Payload *> payloads)
 {
-	for(auto payload : payloads)
+	for (auto payload : payloads)
 	{
-		if(payload->getOrigin() == -1)
+		if (payload->getOrigin() == -1)
 		{
 			playerState = new PlayerState();
 		}
@@ -132,4 +131,9 @@ void GameClient::registerTimeProvider(TimeProvider *timeProvider)
 void GameClient::registerSpriteLoader(SpriteLoader *spriteLoader)
 {
 	this->spriteLoader = spriteLoader;
+	vm = new LuaVm(spriteLoader);
+	vm->registerActorCreator([&](Actor *actor)
+									 {
+										 this->player = actor;
+									 });
 }

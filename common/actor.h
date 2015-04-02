@@ -1,16 +1,19 @@
 #ifndef __ACTOR_H__
 #define __ACTOR_H__
 
+#include <iostream>
 #include <map>
 #include <string>
 #include "sprite.h"
 #include "position.h"
-#include "../client/spriterenderer.h"
+#include "../common/spriterenderer.h"
+
+using namespace std;
 
 class Actor
 {
 public:
-	Actor(std::map<std::string, Sprite *> sprites) : spriteMap(sprites), currentSprite(nullptr), actorPosition(0, 0)
+	Actor(std::string id, std::map<std::string, Sprite *> sprites) : actorId(id), spriteMap(sprites), currentSprite(nullptr), actorPosition(0, 0)
 	{
 
 	}
@@ -40,7 +43,19 @@ public:
 			currentSprite->update(ticks);
 		}
 	}
+
+	Position getPosition()
+	{
+		return actorPosition;
+	}
+
+	void setPosition(int x, int y)
+	{
+		actorPosition.setX(x);
+		actorPosition.setY(y);
+	}
 private:
+	std::string actorId;
 	std::map<std::string, Sprite *> spriteMap;
 	Sprite *currentSprite;
 	SpriteRenderer spriteRenderer;
