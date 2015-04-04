@@ -48,6 +48,8 @@ private:
 	TimeProvider *timeProvider;
 	SpriteLoader *spriteLoader;
 	LuaVm *vm;
+
+	vector<Actor*> actors;
 };
 
 GameClient::GameClient()
@@ -73,12 +75,15 @@ void GameClient::update()
 		vm->init("resources/player.lua");
 	}
 
-	if (player != nullptr)
+	if (actors.size() > 0)
 	{
 		long ticks = timeProvider->ticks();
 		vm->update(ticks);
-		player->update(ticks);
-		player->draw(gfx);
+		for(auto actor : actors)
+		{
+			actor->update(ticks);
+			actor->draw(gfx);
+		}
 	}
 
 
@@ -136,7 +141,7 @@ void GameClient::registerSpriteLoader(SpriteLoader *spriteLoader)
 	vm = new LuaVm(spriteLoader);
 	vm->registerActorCreator([&](Actor *actor)
 									 {
-										 this->player = actor;
+										 this->actors.push_back(actor);
 									 });
 }
 
